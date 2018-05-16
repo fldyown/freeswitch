@@ -1,0 +1,70 @@
+From 13de1e72b9c849f382de7880dfe954da74a762e7 Mon Sep 17 00:00:00 2001
+From: "fldyown@gmail.com" <root@debug010000002015.local.alipay.net>
+Date: Wed, 16 May 2018 21:04:48 +0800
+Subject: [PATCH 7/7] freeswitch_create_and_delete_users
+
+Signed-off-by: fldyown@gmail.com <root@debug010000002015.local.alipay.net>
+---
+ etc/freeswitch/dialplan/default.xml             |  4 ++--
+ etc/freeswitch/directory/default/create_user.sh | 10 ++++++++++
+ etc/freeswitch/directory/default/delete_user.sh |  9 +++++++++
+ 3 files changed, 21 insertions(+), 2 deletions(-)
+ create mode 100755 etc/freeswitch/directory/default/create_user.sh
+ create mode 100755 etc/freeswitch/directory/default/delete_user.sh
+
+diff --git a/etc/freeswitch/dialplan/default.xml b/etc/freeswitch/dialplan/default.xml
+index d4ae8e7..e666049 100644
+--- a/etc/freeswitch/dialplan/default.xml
++++ b/etc/freeswitch/dialplan/default.xml
+@@ -250,7 +250,7 @@
+     </extension>
+ 
+     <extension name="extension-intercom">
+-      <condition field="destination_number" expression="^8(10[01][0-9])$">
++      <condition field="destination_number" expression="^8(10[0-9][0-9]|1000000[0-9][0-9])$">
+ 	<action application="set" data="dialed_extension=$1"/>
+ 	<action application="export" data="sip_auto_answer=true"/>
+ 	<action application="bridge" data="user/${dialed_extension}@${domain_name}"/>
+@@ -263,7 +263,7 @@
+ 	 bridge (hangup_after_bridge=true) 
+     -->
+     <extension name="Local_Extension">
+-      <condition field="destination_number" expression="^(10[01][0-9])$">
++      <condition field="destination_number" expression="^(10[0-9][0-9]|1000000[0-9][0-9])$">
+ 	<action application="export" data="dialed_extension=$1"/>
+ 	<!-- bind_meta_app can have these args <key> [a|b|ab] [a|b|o|s] <app> -->
+ 	<action application="bind_meta_app" data="1 b s execute_extension::dx XML features"/>
+diff --git a/etc/freeswitch/directory/default/create_user.sh b/etc/freeswitch/directory/default/create_user.sh
+new file mode 100755
+index 0000000..c3e84f1
+--- /dev/null
++++ b/etc/freeswitch/directory/default/create_user.sh
+@@ -0,0 +1,10 @@
++#!/bin/bash
++cd $(dirname $(readlink -f $0))
++echo "user path:"$(pwd)
++for ((a=100000020; a<=100000030; a++));
++do
++i=$(echo $a)
++sed -e "s/1000/$i/" 1000.xml > $i.xml;
++
++done
++# dpkg-reconfigure dash select no
+diff --git a/etc/freeswitch/directory/default/delete_user.sh b/etc/freeswitch/directory/default/delete_user.sh
+new file mode 100755
+index 0000000..d802452
+--- /dev/null
++++ b/etc/freeswitch/directory/default/delete_user.sh
+@@ -0,0 +1,9 @@
++#!/bin/bash
++cd $(dirname $(readlink -f $0))
++echo "user path:"$(pwd)
++for ((j=100000020; j<=100000030; j++));
++do
++i=$(echo $j)
++rm $i.xml;
++
++done
+-- 
+2.1.4
+

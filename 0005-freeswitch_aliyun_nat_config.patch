@@ -1,0 +1,163 @@
+From 6ee4a17cffb0b8acd04eb305469d4ba18dc2dfe9 Mon Sep 17 00:00:00 2001
+From: "fldyown@gmail.com" <root@debug010000002015.local.alipay.net>
+Date: Wed, 16 May 2018 17:22:30 +0800
+Subject: [PATCH 5/7] freeswitch_aliyun_nat_config
+
+Signed-off-by: fldyown@gmail.com <root@debug010000002015.local.alipay.net>
+---
+ etc/freeswitch/autoload_configs/switch.conf.xml |  4 ++--
+ etc/freeswitch/autoload_configs/verto.conf.xml  |  2 +-
+ etc/freeswitch/sip_profiles/external.xml        |  6 +++---
+ etc/freeswitch/sip_profiles/internal.xml        | 16 ++++++++--------
+ etc/freeswitch/vars.xml                         |  6 +++---
+ 5 files changed, 17 insertions(+), 17 deletions(-)
+
+diff --git a/etc/freeswitch/autoload_configs/switch.conf.xml b/etc/freeswitch/autoload_configs/switch.conf.xml
+index ababe54..8ce1bde 100644
+--- a/etc/freeswitch/autoload_configs/switch.conf.xml
++++ b/etc/freeswitch/autoload_configs/switch.conf.xml
+@@ -147,8 +147,8 @@
+     <!-- NEEDS DOCUMENTATION -->
+ 
+     <!-- RTP port range -->
+-    <!-- <param name="rtp-start-port" value="16384"/> -->
+-    <!-- <param name="rtp-end-port" value="32768"/> -->
++    <param name="rtp-start-port" value="16384"/>
++    <param name="rtp-end-port" value="32768"/>
+ 
+     <!-- Test each port to make sure it is not in use by some other process before allocating it to RTP -->
+     <!-- <param name="rtp-port-usage-robustness" value="true"/> -->
+diff --git a/etc/freeswitch/autoload_configs/verto.conf.xml b/etc/freeswitch/autoload_configs/verto.conf.xml
+index 7714053..b97180b 100644
+--- a/etc/freeswitch/autoload_configs/verto.conf.xml
++++ b/etc/freeswitch/autoload_configs/verto.conf.xml
+@@ -23,7 +23,7 @@
+       <param name="mcast-ip" value="224.1.1.1"/>
+       <param name="mcast-port" value="1337"/>
+       <param name="rtp-ip" value="$${local_ip_v4}"/>
+-      <!--  <param name="ext-rtp-ip" value=""/> -->
++      <param name="ext-rtp-ip" value="$${external_rtp_ip}"/>
+       <param name="local-network" value="localnet.auto"/>
+       <param name="outbound-codec-string" value="opus,vp8"/>
+       <param name="inbound-codec-string" value="opus,vp8"/>
+diff --git a/etc/freeswitch/sip_profiles/external.xml b/etc/freeswitch/sip_profiles/external.xml
+index 4f169e0..e8685e8 100644
+--- a/etc/freeswitch/sip_profiles/external.xml
++++ b/etc/freeswitch/sip_profiles/external.xml
+@@ -52,7 +52,7 @@
+     <!--<param name="force-register-db-domain" value="$${domain}"/>-->
+     <!-- ************************************************* -->
+ 
+-    <!--<param name="aggressive-nat-detection" value="true"/>-->
++    <param name="aggressive-nat-detection" value="true"/>
+     <param name="inbound-codec-negotiation" value="generous"/>
+     <param name="nonce-ttl" value="60"/>
+     <param name="auth-calls" value="false"/>
+@@ -63,8 +63,8 @@
+     -->
+     <param name="rtp-ip" value="$${local_ip_v4}"/>
+     <param name="sip-ip" value="$${local_ip_v4}"/>
+-    <param name="ext-rtp-ip" value="47.89.251.110"/>
+-    <param name="ext-sip-ip" value="47.89.251.110"/>
++    <param name="ext-rtp-ip" value="$${external_rtp_ip}"/>
++    <param name="ext-sip-ip" value="$${external_sip_ip}"/>
+     <param name="rtp-timeout-sec" value="300"/>
+     <param name="rtp-hold-timeout-sec" value="1800"/>
+     <!--<param name="enable-3pcc" value="true"/>-->
+diff --git a/etc/freeswitch/sip_profiles/internal.xml b/etc/freeswitch/sip_profiles/internal.xml
+index 719bef3..a2761f6 100644
+--- a/etc/freeswitch/sip_profiles/internal.xml
++++ b/etc/freeswitch/sip_profiles/internal.xml
+@@ -107,7 +107,7 @@
+     <!-- extended info parsing -->
+     <!-- <param name="extended-info-parsing" value="true"/> -->
+ 
+-    <!--<param name="aggressive-nat-detection" value="true"/>-->
++    <param name="aggressive-nat-detection" value="true"/>
+     <!--
+         There are known issues (asserts and segfaults) when 100rel is enabled.
+         It is not recommended to enable 100rel at this time.
+@@ -123,7 +123,7 @@
+     <!--
+         enable/disable session timers
+     -->
+-    <!--<param name="enable-timer" value="false"/>-->
++    <param name="enable-timer" value="false"/>
+     <!--<param name="minimum-session-expires" value="120"/>-->
+     <param name="apply-inbound-acl" value="domains"/>
+     <!--
+@@ -175,7 +175,7 @@
+     <!--session timers for all call to expire after the specified seconds -->
+     <!--<param name="session-timeout" value="1800"/>-->
+     <!-- Can be 'true' or 'contact' -->
+-    <!--<param name="multiple-registrations" value="contact"/>-->
++    <param name="multiple-registrations" value="true"/>
+     <!--set to 'greedy' if you want your codec list to take precedence -->
+     <param name="inbound-codec-negotiation" value="generous"/>
+     <!-- if you want to send any special bind params of your own -->
+@@ -263,9 +263,9 @@
+     <!-- Disable Register -->
+     <!--<param name="disable-register" value="true"/> -->
+     <!-- Used for when phones respond to a challenged ACK with method INVITE in the hash -->
+-    <!--<param name="NDLB-broken-auth-hash" value="true"/>-->
++    <param name="NDLB-broken-auth-hash" value="true"/>
+     <!-- add a ;received="<ip>:<port>" to the contact when replying to register for nat handling -->
+-    <!--<param name="NDLB-received-in-nat-reg-contact" value="true"/>-->
++    <param name="NDLB-received-in-nat-reg-contact" value="true"/>
+     <param name="auth-calls" value="$${internal_auth_calls}"/>
+     <!-- Force the user and auth-user to match. -->
+     <param name="inbound-reg-force-matching-username" value="true"/>
+@@ -281,8 +281,8 @@
+          auto                  - Use guessed ip.
+          auto-nat              - Use ip learned from NAT-PMP or UPNP
+     -->
+-    <param name="ext-rtp-ip" value="47.89.251.110"/>
+-    <param name="ext-sip-ip" value="47.89.251.110"/>
++    <param name="ext-rtp-ip" value="$${external_rtp_ip}"/>
++    <param name="ext-sip-ip" value="$${external_sip_ip}"/>
+ 
+     <!-- rtp inactivity timeout -->
+     <param name="rtp-timeout-sec" value="300"/>
+@@ -338,7 +338,7 @@
+     <!--<param name="enable-3pcc" value="true"/>-->
+ 
+     <!-- use at your own risk or if you know what this does.-->
+-    <!--<param name="NDLB-force-rport" value="true"/>-->
++    <param name="NDLB-force-rport" value="true"/>
+     <!--
+         Choose the realm challenge key. Default is auto_to if not set.
+ 
+diff --git a/etc/freeswitch/vars.xml b/etc/freeswitch/vars.xml
+index 20ba2e3..c3225f9 100644
+--- a/etc/freeswitch/vars.xml
++++ b/etc/freeswitch/vars.xml
+@@ -279,7 +279,7 @@
+        use different addresses where this variable appears.
+        Used by: dingaling.conf.xml
+   -->
+-  <X-PRE-PROCESS cmd="set" data="bind_server_ip=auto"/>
++  <X-PRE-PROCESS cmd="exec-set" data="bind_server_ip=curl http://100.100.100.200/latest/meta-data/eipv4"/>
+ 
+   <!-- NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE
+        
+@@ -297,7 +297,7 @@
+        If unspecified, the bind_server_ip value is used.
+        Used by: sofia.conf.xml dingaling.conf.xml
+   -->
+-  <X-PRE-PROCESS cmd="set" data="external_rtp_ip=stun:stun.freeswitch.org"/>
++  <X-PRE-PROCESS cmd="exec-set" data="external_rtp_ip=curl http://100.100.100.200/latest/meta-data/eipv4"/>
+ 
+   <!-- external_sip_ip
+       Used as the public IP address for SDP.
+@@ -310,7 +310,7 @@
+        If unspecified, the bind_server_ip value is used.
+        Used by: sofia.conf.xml dingaling.conf.xml
+   -->
+-  <X-PRE-PROCESS cmd="set" data="external_sip_ip=stun:stun.freeswitch.org"/>
++  <X-PRE-PROCESS cmd="exec-set" data="external_sip_ip=curl http://100.100.100.200/latest/meta-data/eipv4"/>
+ 
+   <!-- unroll-loops
+        Used to turn on sip loopback unrolling.
+-- 
+2.1.4
+

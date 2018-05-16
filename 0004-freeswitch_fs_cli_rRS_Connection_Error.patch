@@ -1,0 +1,26 @@
+From 9ce2f7addc79d93c9090c72580df5f40ce10f572 Mon Sep 17 00:00:00 2001
+From: "fldyown@gmail.com" <root@debug010000002015.local.alipay.net>
+Date: Tue, 15 May 2018 20:48:55 +0800
+Subject: [PATCH 4/7] freeswitch_fs_cli_rRS_Connection_Error
+
+Signed-off-by: fldyown@gmail.com <root@debug010000002015.local.alipay.net>
+---
+ etc/freeswitch/autoload_configs/event_socket.conf.xml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/etc/freeswitch/autoload_configs/event_socket.conf.xml b/etc/freeswitch/autoload_configs/event_socket.conf.xml
+index d62dd34..96441d1 100644
+--- a/etc/freeswitch/autoload_configs/event_socket.conf.xml
++++ b/etc/freeswitch/autoload_configs/event_socket.conf.xml
+@@ -1,7 +1,7 @@
+ <configuration name="event_socket.conf" description="Socket Client">
+   <settings>
+     <param name="nat-map" value="false"/>
+-    <param name="listen-ip" value="::"/>
++    <param name="listen-ip" value="0.0.0.0"/>
+     <param name="listen-port" value="8021"/>
+     <param name="password" value="ClueCon"/>
+     <!--<param name="apply-inbound-acl" value="loopback.auto"/>-->
+-- 
+2.1.4
+

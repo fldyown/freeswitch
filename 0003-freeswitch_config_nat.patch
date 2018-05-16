@@ -1,0 +1,44 @@
+From 2abebfbeeca867549833b0a9bc734eddc4862c84 Mon Sep 17 00:00:00 2001
+From: "fldyown@gmail.com" <root@debug010000002015.local.alipay.net>
+Date: Tue, 15 May 2018 20:30:11 +0800
+Subject: [PATCH 3/7] freeswitch_config_nat
+
+Signed-off-by: fldyown@gmail.com <root@debug010000002015.local.alipay.net>
+---
+ etc/freeswitch/sip_profiles/external.xml | 4 ++--
+ etc/freeswitch/sip_profiles/internal.xml | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/etc/freeswitch/sip_profiles/external.xml b/etc/freeswitch/sip_profiles/external.xml
+index dfc9504..4f169e0 100644
+--- a/etc/freeswitch/sip_profiles/external.xml
++++ b/etc/freeswitch/sip_profiles/external.xml
+@@ -63,8 +63,8 @@
+     -->
+     <param name="rtp-ip" value="$${local_ip_v4}"/>
+     <param name="sip-ip" value="$${local_ip_v4}"/>
+-    <param name="ext-rtp-ip" value="auto-nat"/>
+-    <param name="ext-sip-ip" value="auto-nat"/>
++    <param name="ext-rtp-ip" value="47.89.251.110"/>
++    <param name="ext-sip-ip" value="47.89.251.110"/>
+     <param name="rtp-timeout-sec" value="300"/>
+     <param name="rtp-hold-timeout-sec" value="1800"/>
+     <!--<param name="enable-3pcc" value="true"/>-->
+diff --git a/etc/freeswitch/sip_profiles/internal.xml b/etc/freeswitch/sip_profiles/internal.xml
+index 1529248..719bef3 100644
+--- a/etc/freeswitch/sip_profiles/internal.xml
++++ b/etc/freeswitch/sip_profiles/internal.xml
+@@ -281,8 +281,8 @@
+          auto                  - Use guessed ip.
+          auto-nat              - Use ip learned from NAT-PMP or UPNP
+     -->
+-    <param name="ext-rtp-ip" value="auto-nat"/>
+-    <param name="ext-sip-ip" value="auto-nat"/>
++    <param name="ext-rtp-ip" value="47.89.251.110"/>
++    <param name="ext-sip-ip" value="47.89.251.110"/>
+ 
+     <!-- rtp inactivity timeout -->
+     <param name="rtp-timeout-sec" value="300"/>
+-- 
+2.1.4
+

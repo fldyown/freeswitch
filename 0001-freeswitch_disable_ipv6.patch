@@ -1,0 +1,259 @@
+From 2528ca1a88a80b281d65849f0a44b7cb6d7d3a35 Mon Sep 17 00:00:00 2001
+From: "fldyown@gmail.com" <root@debug010000002015.local.alipay.net>
+Date: Tue, 15 May 2018 20:19:46 +0800
+Subject: [PATCH 1/7] freeswitch_disable_ipv6
+
+Signed-off-by: fldyown@gmail.com <root@debug010000002015.local.alipay.net>
+---
+ etc/freeswitch/sip_profiles/external-ipv6.xml |  97 -------------------
+ etc/freeswitch/sip_profiles/internal-ipv6.xml | 134 --------------------------
+ 2 files changed, 231 deletions(-)
+ delete mode 100644 etc/freeswitch/sip_profiles/external-ipv6.xml
+ delete mode 100644 etc/freeswitch/sip_profiles/internal-ipv6.xml
+
+diff --git a/etc/freeswitch/sip_profiles/external-ipv6.xml b/etc/freeswitch/sip_profiles/external-ipv6.xml
+deleted file mode 100644
+index 99e8feb..0000000
+--- a/etc/freeswitch/sip_profiles/external-ipv6.xml
++++ /dev/null
+@@ -1,97 +0,0 @@
+-<profile name="external-ipv6">
+-  <!-- http://wiki.freeswitch.org/wiki/Sofia_Configuration_Files -->
+-  <!-- This profile is only for outbound registrations to providers -->
+-  <gateways>
+-    <X-PRE-PROCESS cmd="include" data="external-ipv6/*.xml"/>
+-  </gateways>
+-
+-  <aliases>
+-    <!--
+-        <alias name="outbound"/>
+-        <alias name="nat"/>
+-    -->
+-  </aliases>
+-
+-  <domains>
+-    <!--<domain name="all" alias="false" parse="true"/>-->
+-  </domains>
+-
+-  <settings>
+-    <param name="debug" value="0"/>
+-    <!-- If you want FreeSWITCH to shutdown if this profile fails to load, uncomment the next line. -->
+-    <!-- <param name="shutdown-on-fail" value="true"/> -->
+-    <param name="sip-trace" value="no"/>
+-    <param name="sip-capture" value="no"/>
+-    <param name="rfc2833-pt" value="101"/>
+-    <!-- RFC 5626 : Send reg-id and sip.instance -->
+-    <!--<param name="enable-rfc-5626" value="true"/> -->
+-    <param name="sip-port" value="$${external_sip_port}"/>
+-    <param name="dialplan" value="XML"/>
+-    <param name="context" value="public"/>
+-    <param name="dtmf-duration" value="2000"/>
+-    <param name="inbound-codec-prefs" value="$${global_codec_prefs}"/>
+-    <param name="outbound-codec-prefs" value="$${outbound_codec_prefs}"/>
+-    <param name="hold-music" value="$${hold_music}"/>
+-    <param name="rtp-timer-name" value="soft"/>
+-    <!--<param name="enable-100rel" value="true"/>-->
+-    <!--<param name="disable-srv503" value="true"/>-->
+-    <!-- This could be set to "passive" -->
+-    <param name="local-network-acl" value="localnet.auto"/>
+-    <param name="manage-presence" value="false"/>
+-
+-    <!-- used to share presence info across sofia profiles
+-         manage-presence needs to be set to passive on this profile
+-         if you want it to behave as if it were the internal profile
+-         for presence.
+-    -->
+-    <!-- Name of the db to use for this profile -->
+-    <!--<param name="dbname" value="share_presence"/>-->
+-    <!--<param name="presence-hosts" value="$${domain}"/>-->
+-    <!--<param name="force-register-domain" value="$${domain}"/>-->
+-    <!--all inbound reg will stored in the db using this domain -->
+-    <!--<param name="force-register-db-domain" value="$${domain}"/>-->
+-    <!-- ************************************************* -->
+-
+-    <!--<param name="aggressive-nat-detection" value="true"/>-->
+-    <param name="inbound-codec-negotiation" value="generous"/>
+-    <param name="nonce-ttl" value="60"/>
+-    <param name="auth-calls" value="false"/>
+-    <param name="inbound-late-negotiation" value="true"/>
+-    <param name="inbound-zrtp-passthru" value="true"/> <!-- (also enables late negotiation) -->
+-    <!--
+-        DO NOT USE HOSTNAMES, ONLY IP ADDRESSES IN THESE SETTINGS!
+-    -->
+-    <param name="rtp-ip" value="$${local_ip_v6}"/>
+-    <param name="sip-ip" value="$${local_ip_v6}"/>
+-    <!-- Shouldn't set these on IPv6 -->
+-    <!--<param name="ext-rtp-ip" value="auto-nat"/>-->
+-    <!--<param name="ext-sip-ip" value="auto-nat"/>-->
+-    <param name="rtp-timeout-sec" value="300"/>
+-    <param name="rtp-hold-timeout-sec" value="1800"/>
+-    <!--<param name="enable-3pcc" value="true"/>-->
+-
+-    <!-- TLS: disabled by default, set to "true" to enable -->
+-    <param name="tls" value="$${external_ssl_enable}"/>
+-    <!-- Set to true to not bind on the normal sip-port but only on the TLS port -->
+-    <param name="tls-only" value="false"/>
+-    <!-- additional bind parameters for TLS -->
+-    <param name="tls-bind-params" value="transport=tls"/>
+-    <!-- Port to listen on for TLS requests. (5081 will be used if unspecified) -->
+-    <param name="tls-sip-port" value="$${external_tls_port}"/>
+-    <!-- Location of the agent.pem and cafile.pem ssl certificates (needed for TLS server) -->
+-    <!--<param name="tls-cert-dir" value=""/>-->
+-    <!-- Optionally set the passphrase password used by openSSL to encrypt/decrypt TLS private key files -->
+-    <param name="tls-passphrase" value=""/>
+-    <!-- Verify the date on TLS certificates -->
+-    <param name="tls-verify-date" value="true"/>
+-    <!-- TLS verify policy, when registering/inviting gateways with other servers (outbound) or handling inbound registration/invite requests how should we verify their certificate -->
+-    <!-- set to 'in' to only verify incoming connections, 'out' to only verify outgoing connections, 'all' to verify all connections, also 'subjects_in', 'subjects_out' and 'subjects_all' for subject validation. Multiple policies can be split with a '|' pipe -->
+-    <param name="tls-verify-policy" value="none"/>
+-    <!-- Certificate max verify depth to use for validating peer TLS certificates when the verify policy is not none -->
+-    <param name="tls-verify-depth" value="2"/>
+-    <!-- If the tls-verify-policy is set to subjects_all or subjects_in this sets which subjects are allowed, multiple subjects can be split with a '|' pipe -->
+-    <param name="tls-verify-in-subjects" value=""/>
+-    <!-- TLS version ("sslv23" (default), "tlsv1"). NOTE: Phones may not work with TLSv1 -->
+-    <param name="tls-version" value="$${sip_tls_version}"/>
+-  </settings>
+-</profile>
+diff --git a/etc/freeswitch/sip_profiles/internal-ipv6.xml b/etc/freeswitch/sip_profiles/internal-ipv6.xml
+deleted file mode 100644
+index 21bb1f1..0000000
+--- a/etc/freeswitch/sip_profiles/internal-ipv6.xml
++++ /dev/null
+@@ -1,134 +0,0 @@
+-<profile name="internal-ipv6">
+-  <!--
+-      This is an example of a sofia profile setup to listen on IPv6.
+-  -->
+-  <!-- http://wiki.freeswitch.org/wiki/Sofia_Configuration_Files -->
+-  <!--aliases are other names that will work as a valid profile name for this profile-->
+-  <settings>
+-    <!-- Can be set to "_undef_" to remove the User-Agent header -->
+-    <!-- <param name="user-agent-string" value="FreeSWITCH Rocks!"/> -->
+-    <param name="debug" value="0"/>
+-    <param name="sip-trace" value="no"/>
+-    <param name="context" value="public"/>
+-    <param name="rfc2833-pt" value="101"/>
+-    <!-- port to bind to for sip traffic -->
+-    <param name="sip-port" value="$${internal_sip_port}"/>
+-    <param name="dialplan" value="XML"/>
+-    <param name="dtmf-duration" value="2000"/>
+-    <param name="inbound-codec-prefs" value="$${global_codec_prefs}"/>
+-    <param name="outbound-codec-prefs" value="$${global_codec_prefs}"/>
+-    <param name="use-rtp-timer" value="true"/>
+-    <param name="rtp-timer-name" value="soft"/>
+-    <!-- ip address to use for rtp -->
+-    <param name="rtp-ip" value="$${local_ip_v6}"/>
+-    <!-- ip address to bind to -->
+-    <param name="sip-ip" value="$${local_ip_v6}"/>
+-    <param name="hold-music" value="$${hold_music}"/>
+-    <!--<param name="enable-100rel" value="false"/>-->
+-    <!--<param name="disable-srv503" value="true"/>-->
+-    <param name="apply-inbound-acl" value="domains"/>
+-    <!--<param name="apply-register-acl" value="domains"/>-->
+-    <!--<param name="dtmf-type" value="info"/>-->
+-    <param name="record-template" value="$${recordings_dir}/${caller_id_number}.${strftime(%Y-%m-%d-%H-%M-%S)}.wav"/>
+-    <!--enable to use presence and mwi -->
+-    <param name="manage-presence" value="true"/>
+-    <!-- This setting is for AAL2 bitpacking on G726 -->
+-    <!-- <param name="bitpacking" value="aal2"/> -->
+-    <!--max number of open dialogs in proceeding -->
+-    <!--<param name="max-proceeding" value="1000"/>-->
+-    <!--session timers for all call to expire after the specified seconds -->
+-    <!--<param name="session-timeout" value="1800"/>-->
+-    <!--<param name="multiple-registrations" value="true"/>-->
+-    <!--set to 'greedy' if you want your codec list to take precedence -->
+-    <param name="inbound-codec-negotiation" value="generous"/>
+-    <!-- if you want to send any special bind params of your own -->
+-    <!--<param name="bind-params" value="transport=udp"/>-->
+-    <!--<param name="unregister-on-options-fail" value="true"/>-->
+-
+-    <!-- TLS: disabled by default, set to "true" to enable -->
+-    <param name="tls" value="$${internal_ssl_enable}"/>
+-    <!-- additional bind parameters for TLS -->
+-    <param name="tls-bind-params" value="transport=tls"/>
+-    <!-- Port to listen on for TLS requests. (5061 will be used if unspecified) -->
+-    <param name="tls-sip-port" value="$${internal_tls_port}"/>
+-    <!-- Location of the agent.pem and cafile.pem ssl certificates (needed for TLS server) -->
+-    <param name="tls-cert-dir" value="$${internal_ssl_dir}"/>
+-    <!-- TLS version ("sslv23" (default), "tlsv1"). NOTE: Phones may not work with TLSv1 -->
+-    <param name="tls-version" value="$${sip_tls_version}"/>
+-
+-    <!--If you don't want to pass through timestampes from 1 RTP call to another (on a per call basis with rtp_rewrite_timestamps chanvar)-->
+-    <!--<param name="rtp-rewrite-timestamps" value="true"/>-->
+-    <!--<param name="pass-rfc2833" value="true"/>-->
+-    <!--If you have ODBC support and a working dsn you can use it instead of SQLite-->
+-    <!--<param name="odbc-dsn" value="dsn:user:pass"/>-->
+-
+-    <!--Uncomment to set all inbound calls to no media mode-->
+-    <!--<param name="inbound-bypass-media" value="true"/>-->
+-
+-    <!--Uncomment to set all inbound calls to proxy media mode-->
+-    <!--<param name="inbound-proxy-media" value="true"/>-->
+-
+-    <!-- Let calls hit the dialplan before selecting codec for the a-leg -->
+-    <param name="inbound-late-negotiation" value="true"/>
+-
+-    <!-- Allow ZRTP clients to negotiate end-to-end security associations (also enables late negotiation) -->
+-    <param name="inbound-zrtp-passthru" value="true"/>
+-
+-    <!-- this lets anything register -->
+-    <!--  comment the next line and uncomment one or both of the other 2 lines for call authentication -->
+-    <!-- <param name="accept-blind-reg" value="true"/> -->
+-
+-    <!-- accept any authentication without actually checking (not a good feature for most people) -->
+-    <!-- <param name="accept-blind-auth" value="true"/> -->
+-
+-    <!-- suppress CNG on this profile or per call with the 'suppress_cng' variable -->
+-    <!-- <param name="suppress-cng" value="true"/> -->
+-
+-    <!--TTL for nonce in sip auth-->
+-    <param name="nonce-ttl" value="60"/>
+-    <!--Uncomment if you want to force the outbound leg of a bridge to only offer the codec
+-        that the originator is using-->
+-    <!--<param name="disable-transcoding" value="true"/>-->
+-    <!-- Used for when phones respond to a challenged ACK with method INVITE in the hash -->
+-    <!--<param name="NDLB-broken-auth-hash" value="true"/>-->
+-    <!-- add a ;received="<ip>:<port>" to the contact when replying to register for nat handling -->
+-    <!--<param name="NDLB-received-in-nat-reg-contact" value="true"/>-->
+-    <param name="auth-calls" value="$${internal_auth_calls}"/>
+-    <!-- on authed calls, authenticate *all* the packets not just invite -->
+-    <param name="auth-all-packets" value="false"/>
+-    <!-- Shouldn't set these on IPv6 -->
+-    <!-- <param name="ext-rtp-ip" value="$${external_rtp_ip}"/> -->
+-    <!-- <param name="ext-sip-ip" value="$${external_sip_ip}"/> -->
+-    <!-- rtp inactivity timeout -->
+-    <param name="rtp-timeout-sec" value="300"/>
+-    <param name="rtp-hold-timeout-sec" value="1800"/>
+-    <!-- VAD choose one (out is a good choice); -->
+-    <!-- <param name="vad" value="in"/> -->
+-    <!-- <param name="vad" value="out"/> -->
+-    <!-- <param name="vad" value="both"/> -->
+-    <!--<param name="alias" value="sip:10.0.1.251:5555"/>-->
+-    <!--
+-        These are enabled to make the default config work better out of the box.
+-        If you need more than ONE domain you'll need to not use these options.
+-
+-    -->
+-    <!--all inbound reg will look in this domain for the users -->
+-    <param name="force-register-domain" value="$${domain}"/>
+-    <!--all inbound reg will stored in the db using this domain -->
+-    <param name="force-register-db-domain" value="$${domain}"/>
+-    <!-- disable register and transfer which may be undesirable in a public switch -->
+-    <!--<param name="disable-transfer" value="true"/>-->
+-    <!--<param name="disable-register" value="true"/>-->
+-    <!--<param name="enable-3pcc" value="true"/>-->
+-    <!-- use stun when specified (default is true) -->
+-    <!--<param name="stun-enabled" value="true"/>-->
+-    <!-- use stun when specified (default is true) -->
+-    <!-- set to true to have the profile determine stun is not useful and turn it off globally-->
+-    <!--<param name="stun-auto-disable" value="true"/>-->
+-
+-    <!-- the following can be used as workaround with bogus SRV/NAPTR records -->
+-    <!--<param name="disable-srv" value="false" />-->
+-    <!--<param name="disable-naptr" value="false" />-->
+-
+-  </settings>
+-</profile>
+-- 
+2.1.4
+

@@ -1,0 +1,31 @@
+From 21c971dacd1bb468d0a0c2a47515fe3e043382a4 Mon Sep 17 00:00:00 2001
+From: "fldyown@gmail.com" <root@debug010000002015.local.alipay.net>
+Date: Wed, 16 May 2018 21:00:01 +0800
+Subject: [PATCH 6/7] freeswitch_add_H264_VP9_And_other_codes
+
+Signed-off-by: fldyown@gmail.com <root@debug010000002015.local.alipay.net>
+---
+ etc/freeswitch/vars.xml | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/etc/freeswitch/vars.xml b/etc/freeswitch/vars.xml
+index c3225f9..ade7065 100644
+--- a/etc/freeswitch/vars.xml
++++ b/etc/freeswitch/vars.xml
+@@ -253,10 +253,10 @@
+        125 - 
+        126 -
+        127 - BV32
+-
++  fldy add global_codec_prefs , you maybe go "fs_cli -rRS and load mod_av"
+   -->
+-  <X-PRE-PROCESS cmd="set" data="global_codec_prefs=OPUS,G722,PCMU,PCMA,VP8"/>
+-  <X-PRE-PROCESS cmd="set" data="outbound_codec_prefs=OPUS,G722,PCMU,PCMA,VP8"/>
++  <X-PRE-PROCESS cmd="set" data="global_codec_prefs=OPUS,iLBC,G722,PCMU,PCMA,H263,H263-1998,H264,GSM,VP8,VP9"/>
++  <X-PRE-PROCESS cmd="set" data="outbound_codec_prefs=OPUS,iLBC,G722,PCMU,PCMA,H263,H263-1998,H264,GSM,VP8,VP9"/>
+ 
+   <!--
+       xmpp_client_profile and xmpp_server_profile
+-- 
+2.1.4
+
