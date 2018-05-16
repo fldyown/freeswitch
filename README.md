@@ -66,30 +66,9 @@
 	tail -f /var/log/freeswitch/freeswitch.log
 
 ### 用户管理
-	创建一个用户模版：
+	使用1000.xml的默认用户作为模版创建用户即可
 	
-	<include>
-	    <user id="2000" number-alias="root">
-	        <params>
-	            <param name="password" value="123456"/>
-	            <param name="reverse-auth-user" value="2000"/>
-	            <param name="reverse-auth-pass" value="123456"/>
-	            <param name="vm-password" value="c99ecff92015"/>
-	            <param name="vm-enabled" value="true"/>
-	            <param name="directory-exten-visible" value="true"/>
-	            <param name="dial-string" value="{sip_invite_domain=${domain_name},leg_timeout=30,presence_id=${dialed_user}@${dialed_domain}}${sofia_contact(${dialed_user}@${dialed_domain})}"/>
-	        </params>
-	        <variables>
-	            <variable name="domain_name" value="xxx.xxx.xxx.xxx"/>
-	            <variable name="toll_allow" value=""/>
-	            <variable name="user_context" value="default"/>
-	            <variable name="directory-visible" value="true"/>
-	            <variable name="limit_max" value="5"/>
-	            <variable name="sip-force-contact" value="NDLB-connectile-dysfunction-2.0"/>
-	            <variable name="sip-force-expires" value="180"/>
-	        </variables>
-	    </user>
-	</include>
+	0007-freeswitch_create_and_delete_users.patch
 
 
 ### 错误解决
